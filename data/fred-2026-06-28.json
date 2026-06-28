@@ -1,0 +1,65 @@
+{
+  "fetched_at": "2026-06-28T09:16:49Z",
+  "series": {
+    "hy_oas": {
+      "key": "hy_oas",
+      "series_id": "BAMLH0A0HYM2",
+      "label": "ICE BofA US HY OAS",
+      "units": "percent (1 pt = 100bp)",
+      "as_of": "2026-06-25",
+      "value": 2.78,
+      "change_1w": 0.12,
+      "change_1w_bps": 12.0,
+      "change_1m": 0.06,
+      "change_1m_bps": 6.0
+    },
+    "curve_10y2y": {
+      "key": "curve_10y2y",
+      "series_id": "T10Y2Y",
+      "label": "10Y-2Y Treasury spread",
+      "units": "percent",
+      "as_of": "2026-06-26",
+      "value": 0.31,
+      "change_1w": 0.04,
+      "change_1w_bps": 4.0,
+      "change_1m": -0.17,
+      "change_1m_bps": -17.0
+    },
+    "ust_2y": {
+      "key": "ust_2y",
+      "series_id": "DGS2",
+      "label": "UST 2Y constant maturity",
+      "units": "percent",
+      "as_of": "2026-06-25",
+      "value": 4.09,
+      "change_1w": -0.1,
+      "change_1w_bps": -10.0,
+      "change_1m": 0.08,
+      "change_1m_bps": 8.0
+    },
+    "ust_10y": {
+      "key": "ust_10y",
+      "series_id": "DGS10",
+      "label": "UST 10Y constant maturity",
+      "units": "percent",
+      "as_of": "2026-06-25",
+      "value": 4.4,
+      "change_1w": -0.06,
+      "change_1w_bps": -6.0,
+      "change_1m": -0.1,
+      "change_1m_bps": -10.0
+    },
+    "ig_oas": {
+      "key": "ig_oas",
+      "series_id": "BAMLC0A0CM",
+      "label": "ICE BofA US IG OAS (optional context)",
+      "units": "percent",
+      "as_of": "2026-06-25",
+      "value": 0.76,
+      "change_1w": 0.02,
+      "change_1w_bps": 2.0,
+      "change_1m": 0.02,
+      "change_1m_bps": 2.0
+    }
+  }
+}
