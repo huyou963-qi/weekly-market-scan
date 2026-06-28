@@ -1,7 +1,7 @@
-# Slack 摘要消息模板（Parent message）
+# Slack 摘要消息模板（Parent message — 唯一一条）
 
-> 作为 **频道主消息** 发送；完整报告发在同一条消息的 **thread** 里。  
-> 目标长度：**≤ 2500 字符**（留余量给 Slack 格式）。
+> 作为 **频道主消息** 发送；完整报告在 **GitHub `reports/`**，不发 thread。  
+> 目标长度：**≤ 2500 字符**（留余量给 Slack 格式与 URL）。
 
 ---
 
@@ -21,7 +21,9 @@
 
 *vs last week* · {{1-2 lines from memory, or "首周无对比"}}
 
-_完整报告见 thread ↓_
+📎 *完整报告* · https://github.com/huyou963-qi/weekly-market-scan/blob/main/reports/week-ending-{{FRIDAY_DATE}}.md
+
+_完整报告见上方链接_
 ```
 
 ---
@@ -31,4 +33,5 @@ _完整报告见 thread ↓_
 - 用 Slack `*bold*` 和 `•` bullet，**不要用 Markdown 表格**
 - 数字 inline：`SPX 7354 (-2.0% 1W)`
 - FRED 字段标注 `(FRED)` 和 as-of 日期
-- 末尾固定 `_完整报告见 thread ↓_` 引导点击
+- GitHub URL 必须在 **push 成功之后** 再发送
+- **不要**发 thread；**不要**写 `_完整报告见 thread ↓_`

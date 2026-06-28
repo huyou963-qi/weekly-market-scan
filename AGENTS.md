@@ -39,15 +39,19 @@ HBM/DRAM, cloud GPU $/hr, AI API $/1M tokens, hyperscaler capex (MSFT/GOOGL/AMZN
 
 - As-of date + source on every number
 - Label 事实 / 解读 / 判断
-- Output: full markdown report in run output; if Post to Slack enabled, also deliver per Step 12 (summary + thread)
+- Output: full markdown in run output; if Post to Slack enabled, deliver per Step 12 (summary + GitHub link, 0 thread)
 
-### Slack delivery (Post to Slack enabled)
+### Step 12 — Slack + GitHub archive (Post to Slack enabled)
 
 See `reference/slack-delivery.md` and `templates/slack-summary.md`:
 
-1. Parent message to configured channel (≤2500 chars)
-2. Full report in thread, split ≤3500 chars/part (4 parts default)
-3. Always keep complete Markdown in run output
+1. Write full report to `reports/week-ending-YYYY-MM-DD.md` (per `templates/weekly-report.md`)
+2. `git add` → `commit` → `push` to `main` (`report: week ending YYYY-MM-DD`)
+3. Post **one** Slack parent to configured channel (≤2500 chars): summary + Quick levels + vs last week + GitHub blob URL:
+   `https://github.com/huyou963-qi/weekly-market-scan/blob/main/reports/week-ending-YYYY-MM-DD.md`
+4. **Do not** post thread replies
+5. Always keep complete Markdown in run output
+6. If push fails: note in Slack that full report is in Run output only; do not post a broken link
 
 ### Templates
 

@@ -60,22 +60,13 @@ Compare to last run: regime, rotation, AI/capex trends, credit levels.
 
 ## Slack delivery (Post to Slack enabled — default)
 
-When the **Post to Slack** tool is enabled:
+When the **Post to Slack** tool is enabled, follow `AGENTS.md` Step 12 and `reference/slack-delivery.md`:
 
-1. **Parent message** (channel): Use `templates/slack-summary.md` format. Max **2500 characters**. Include 5-bullet summary, quick levels (SPX/NDX/HY OAS/10Y-2Y/VIX), vs last week, and end with `_完整报告见 thread ↓_`. Use Slack `*bold*` and bullets — no tables.
+1. Write full report to `reports/week-ending-YYYY-MM-DD.md`; commit and push to `main`
+2. **Parent message only** (channel): Use `templates/slack-summary.md` format. Max **2500 characters**. Include 5-bullet summary, quick levels, vs last week, and GitHub blob URL. Use Slack `*bold*` and bullets — no tables. **Do not post thread replies.**
+3. Also return the complete markdown in the automation run output.
 
-2. **Thread replies** (same message thread): Post the **full report** split into parts ≤ **3500 characters** each. Default split:
-   - Part 1/4 — 大类资产 & 宏观
-   - Part 2/4 — 结构 & 轮动 & AI 产业链
-   - Part 3/4 — 事件 & 股票 & 风险 & Regime
-   - Part 4/4 — 异常 & Playbook & sources
-   Convert markdown tables to bullets for Slack. Prefix each part with `📎 *Part X/N — title*`.
-
-3. Post parent **first**, then thread parts **in order**.
-
-4. Do **not** send WeChat or other channels.
-
-If Post to Slack is **disabled**, skip Slack steps; run output only.
+If Post to Slack is **disabled**, skip Slack post; run output only (GitHub push optional).
 
 ## Tone
 
