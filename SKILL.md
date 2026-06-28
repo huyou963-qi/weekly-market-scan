@@ -4,10 +4,11 @@ description: >-
   Professional weekly cross-asset market scan for traders: major asset classes,
   equity sector/industry structure, macro calendar, key events, watchlist impact,
   risk regime, FRED-backed credit/curve data (HY OAS, 10Y-2Y), AI supply chain
-  (HBM, GPU cloud rental, API pricing, hyperscaler capex), and actionable
-  next-week views. Use when building or running a weekly market check, market
-  wrap, regime review, sector rotation report, or Cursor Automation for scheduled
-  market monitoring (周度市场检测, 周报, 大类资产, 行业结构, 重点事件, FRED, HBM, AI capex).
+  (HBM, GPU cloud rental, API pricing, hyperscaler capex), Slack delivery (summary +
+  thread), and actionable next-week views. Use when building or running a weekly
+  market check, market wrap, regime review, sector rotation report, Slack weekly
+  report, or Cursor Automation for scheduled market monitoring (周度市场检测, 周报,
+  大类资产, Slack, thread).
 disable-model-invocation: true
 ---
 
@@ -21,6 +22,7 @@ This skill has two modes:
 |------|------|--------|
 | `scan` | User asks for this week's market review | [weekly-report.md](templates/weekly-report.md) |
 | `scan-wechat` | User wants WeChat-readable format or push | [wechat-report.md](templates/wechat-report.md) — see [wechat-delivery.md](reference/wechat-delivery.md) |
+| `scan-slack` | User wants Slack delivery or Automation with Post to Slack | [slack-summary.md](templates/slack-summary.md) parent + thread — see [slack-delivery.md](reference/slack-delivery.md) |
 | `automation` | User wants a Cursor Automation for weekly runs | Draft via **automate** skill + [automation-prompt.md](templates/automation-prompt.md) |
 
 Default market scope: **global macro + US equities** unless the user specifies A-share / HK / Europe-only focus.
@@ -47,6 +49,7 @@ Weekly Scan Progress:
 - [ ] 9. Anomalies & divergences
 - [ ] 10. Next-week playbook
 - [ ] 11. Quality gate
+- [ ] 12. Slack delivery (if Post to Slack enabled)
 ```
 
 ### Step 0 — Scope & period anchor
@@ -241,6 +244,18 @@ Before delivery:
 - [ ] Conflicting signals acknowledged, not smoothed over
 - [ ] Report fits [weekly-report.md](templates/weekly-report.md) structure
 - [ ] Action section has explicit invalidation levels
+- [ ] If **Slack enabled**: parent ≤2500 chars + full report in thread (see Step 12)
+
+### Step 12 — Slack delivery (when Post to Slack enabled)
+
+Full spec: [slack-delivery.md](reference/slack-delivery.md).
+
+1. **Parent message** — use [slack-summary.md](templates/slack-summary.md); ≤2500 chars; 5 bullets + quick levels + `_完整报告见 thread ↓_`
+2. **Thread** — full report from [weekly-report.md](templates/weekly-report.md); split into ≤3500-char parts (default 4 parts by section group)
+3. **Run output** — always retain complete Markdown in automation run (Slack is delivery copy, not sole archive)
+4. **No tables in Slack** — convert tables to bullets in thread messages
+
+If Post to Slack is **disabled**, skip Step 12; deliver run output only.
 
 ---
 
@@ -255,8 +270,8 @@ When the user wants a **scheduled weekly Cursor Automation**, read the **automat
 | Trigger | **Sunday 20:00 Beijing** (`0 20 * * 0`) | Confirm timezone Asia/Shanghai in editor |
 | Name | Weekly Market Scan | |
 | Memory | Enabled | Track recurring themes & watchlist |
-| Tools | Post to Slack (optional) + **FRED MCP** | Credit/curve data; deliver report to channel |
-| Prompt body | [automation-prompt.md](templates/automation-prompt.md) | Paste/adapt into automation instructions |
+| Tools | **Post to Slack** + **FRED** (MCP or REST) | Summary → channel; full report → thread |
+| Prompt body | [automation-prompt.md](templates/automation-prompt.md) | Includes Slack delivery block |
 | Secrets | `FRED_API_KEY` in MCP env or Cloud | Required for HY OAS / T10Y2Y |
 
 ### Automation prompt rules
@@ -266,14 +281,14 @@ When the user wants a **scheduled weekly Cursor Automation**, read the **automat
 - Agent **must** pull HY OAS + 10Y-2Y via FRED MCP or `fetch_fred.py` before writing credit/curve fields
 - Agent **must** run Step 4.5 AI supply chain tracker (HBM, cloud, API, capex)
 - Agent **must not** invent data — FRED MCP / script / web search for verification
-- Output: complete weekly report + 5-bullet executive summary at top
-- If Slack enabled: exec summary in message, full report as thread or attached doc
+- Output: complete weekly report in run output **and** Slack (summary + thread) when Post to Slack enabled
+- If Slack enabled: **must** follow Step 12 — parent per `slack-summary.md`, full report in thread per `slack-delivery.md`
 
 ### User config to collect before drafting automation
 
 1. **Markets**: US only / US+CN / global
 2. **Watchlist**: tickers or "use memory"
-3. **Delivery**: Cloud run output only (default) / Slack / WeChat — user preference
+3. **Delivery**: **Slack (summary + thread, default)** / run output only / WeChat
 4. **Schedule**: day + time + timezone
 5. **Language**: 中文 / English / bilingual
 6. **Risk tolerance**: macro overlay only vs include trade ideas
@@ -284,11 +299,22 @@ When the user wants a **scheduled weekly Cursor Automation**, read the **automat
 
 | Format | Template | Use |
 |--------|----------|-----|
-| Full report | [weekly-report.md](templates/weekly-report.md) | 存档、Slack、桌面 |
-| **WeChat** | [wechat-report.md](templates/wechat-report.md) | 手机阅读、PushPlus / 企业微信 / **公众号** |
+| Full report | [weekly-report.md](templates/weekly-report.md) | 存档、Slack thread、Runs |
+| **Slack parent** | [slack-summary.md](templates/slack-summary.md) | 频道摘要消息 |
+| **WeChat** | [wechat-report.md](templates/wechat-report.md) | PushPlus / 企业微信 / 公众号 |
 | Executive only | summary + playbook | 快速浏览 |
 
-Default: `weekly-report.md`. User asks 微信 / WeChat / 手机阅读 → use **`scan-wechat`** (no markdown tables; split 摘要+详情 if >3500 字).
+Default: `weekly-report.md`. User asks Slack / Automations Post to Slack → **`scan-slack`** (parent + thread). User asks 微信 → **`scan-wechat`**.
+
+### Slack delivery (summary + thread)
+
+When **Post to Slack** is enabled in Automation (or user requests Slack):
+
+1. **Parent** — [slack-summary.md](templates/slack-summary.md) to configured channel (≤2500 chars)
+2. **Thread** — full report split per [slack-delivery.md](reference/slack-delivery.md) (≤3500 chars/part)
+3. **Runs** — complete Markdown always saved in automation run output
+
+Enabling the Slack tool alone is not enough — instructions **must** require Step 12.
 
 ### WeChat delivery
 
@@ -308,7 +334,7 @@ Automation 微信流：生成 wechat 格式 → 摘要推送 → 详情推送 �
 - FRED API & MCP setup: [fred-data.md](reference/fred-data.md)
 - AI supply chain tracker: [ai-supply-chain.md](reference/ai-supply-chain.md)
 - FRED fetch script: [scripts/fetch_fred.py](scripts/fetch_fred.py)
-- WeChat format & push: [wechat-delivery.md](reference/wechat-delivery.md), [wechat-report.md](templates/wechat-report.md), [scripts/push_wechat.py](scripts/push_wechat.py)
+- Slack summary + thread: [slack-delivery.md](reference/slack-delivery.md), [slack-summary.md](templates/slack-summary.md)
 - Full coverage & thresholds: [coverage-matrix.md](reference/coverage-matrix.md)
 - Automation agent prompt: [automation-prompt.md](templates/automation-prompt.md)
 - Report template: [weekly-report.md](templates/weekly-report.md)

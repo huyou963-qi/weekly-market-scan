@@ -39,7 +39,15 @@ HBM/DRAM, cloud GPU $/hr, AI API $/1M tokens, hyperscaler capex (MSFT/GOOGL/AMZN
 
 - As-of date + source on every number
 - Label 事实 / 解读 / 判断
-- Output: full markdown report in run output only — no Slack/WeChat
+- Output: full markdown report in run output; if Post to Slack enabled, also deliver per Step 12 (summary + thread)
+
+### Slack delivery (Post to Slack enabled)
+
+See `reference/slack-delivery.md` and `templates/slack-summary.md`:
+
+1. Parent message to configured channel (≤2500 chars)
+2. Full report in thread, split ≤3500 chars/part (4 parts default)
+3. Always keep complete Markdown in run output
 
 ### Templates
 
